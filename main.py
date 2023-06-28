@@ -14,8 +14,9 @@ import util as U
 
 
 def main():
-     
-    pass 
-       
+    DEM =  r'C:\Users\abfernan\CrossCanFloodMapping\PCRasterPython\data\BCQuesnellWsh2GeoFill.tif'
+    gdalReader = U.importRasterGDAL(DEM)
+    gdalReader.printRaster()
+    
 if __name__ == "__main__":
     main()  

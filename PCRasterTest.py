@@ -23,18 +23,18 @@ def computeHAND():
     aguila(subCatchments)
     print('Computing HAND')
     
-def areaMInimum():
-    pcr.setclone('data\BC_Quesnel_PCr_WShed2_Fill.map')
-    DEM = pcr.readmap('data\BC_Quesnel_PCr_WShed2_Fill.map')
-    subCatchments = pcr.readmap('data\subCathments.map')
+def HAND(DEMPath,subCatchmentsPath,handPath):
+    '''
+    All path can be eather local or full path. 
+    '''
+    DEM = pcr.readmap(DEMPath)
+    subCatchments = pcr.readmap(subCatchmentsPath)
     areaMin = areaminimum(DEM,subCatchments)
     aguila(areaMin)
     pcr.report(areaMin,'data\z_drainage.map')
     HAND = DEM - areaMin
     aguila(HAND)
-    pcr.report(HAND,'data\hand.map')
-    print("YEssssss")
-
+    pcr.report(HAND,handPath)
 
 def main():
     pass 
