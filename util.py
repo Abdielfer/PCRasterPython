@@ -1,4 +1,4 @@
-import os, sys, pathlib
+import os, sys, pathlib,ntpath
 from osgeo import gdal
 from osgeo import gdal_array
 import rasterio as rio
@@ -7,8 +7,8 @@ from whitebox.whitebox_tools import WhiteboxTools, default_callback
 import whitebox_workflows as wbw   
 
 ### Configurations And file management
-def ensureDirectory(pathToCheck):
-    if not os.path.isdir(pathToCheck): 
+def ensureDirectory(pathToCheck):  
+    if not os.path.exists(pathToCheck): 
         os.mkdir(pathToCheck)
         print(f"Confirmed directory at: {pathToCheck} ")
         return pathToCheck
@@ -23,7 +23,7 @@ def splitFilenameAndExtention(file_path):
     return name, extention 
 
 ####   GDAL Tools  ###
-class importRasterGDAL():
+class RasterGDAL():
     '''
     Some info about GDAL deo Transform
     adfGeoTransform[0] /* top left x */
@@ -37,6 +37,7 @@ class importRasterGDAL():
     def __init__(self, rasterPath) -> None:
         gdal.AllRegister() # register all of the drivers
         gdal.DontUseExceptions()
+        self.inputPath = rasterPath
         self.ds = gdal.Open(rasterPath)
         if self.ds is None:
             print('Could not open image')
@@ -77,6 +78,18 @@ class importRasterGDAL():
     def closeRaster(self):
         self.ds = None
 
+    def translateRaster(self, outpPath, format:str = "GeoTiff"):
+        """
+        Ref: https://gdal.org/api/python/osgeo.gdal.html#osgeo.gdal.Translate
+        """
+        gdal.Translate(outpPath,self.ds,format=format)
+        return True
+
+    def saveTiffAsPCRaster(self):
+        outpPath = ntpath.basename(self.inputPath).replace('.tif','.map') 
+        gdal.Translate(outpPath,self.ds,format='PCRaster')
+        return True
+
     def printRaster(self):
         print("---- Image size ----")
         print(f"Row : {self.rows}")
@@ -89,14 +102,15 @@ class importRasterGDAL():
         print(f"projection : {self.projection}")
         print(f"MetaData : {self.MetaData}")
 
+
 # Read raster data as numeric array from file
 def readRasterAsArry(rasterPath):
    return gdal_array.LoadFile(rasterPath)
 
 ####   Rasterio Tools  #####
-def readRaster(rasterPath:os.path):
+def readRasterRio(rasterPath:os.path):
     '''
-    Read a raster qith Rasterio.
+    Read a raster with Rasterio.
     return:
      Raster data as np.array
      Raster.profile: dictionary with all rater information
@@ -107,7 +121,7 @@ def readRaster(rasterPath:os.path):
     # print(f"raster data shape in ReadRaster : {rasterData.shape}")
     return rasterData, profile
 
-def createRaster(savePath:os.path, data:np.array, profile, noData:int = None):
+def createRasterRio(savePath:os.path, data:np.array, profile, noData:int = None):
     '''
     parameter: 
     @savePath: Most contain the file name ex.: *name.tif.
@@ -126,6 +140,8 @@ def createRaster(savePath:os.path, data:np.array, profile, noData:int = None):
             new_dataset.write(data)
             print("Created new raster>>>")
     return savePath
+
+
 
 #########################
 ####   WhiteBoxTools  ###
