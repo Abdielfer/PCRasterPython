@@ -22,6 +22,15 @@ def splitFilenameAndExtention(file_path):
     name = fpath.stem
     return name, extention 
 
+def replaceEtrention(inPath,NewExt):
+    '''
+    Just remember to add the poin to the new ext -> '.map'
+    '''
+    _,fileName = ntpath.split(inPath)
+    _,actualExt = ntpath.splitext(fileName)
+    newName= ntpath.basename(inPath).replace(actualExt,NewExt)
+    return newName
+
 ####   GDAL Tools  ###
 class RasterGDAL():
     '''
