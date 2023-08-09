@@ -1,9 +1,5 @@
-import sys
-sys.path.append('C:/Users/abfernan/.conda/envs/PCRaster/')
-
-
 import PCRasterTest as PCRT
-
+import util as U
 
 # inmport raster.tif
 # OPTIONAL: clip raster by polygon
@@ -15,7 +11,9 @@ import PCRasterTest as PCRT
 
 def main():
     DEM =  r'C:\Users\abfernan\CrossCanFloodMapping\PCRasterPython\data\BCQuesnellWsh2GeoFill.tif'
-    PCRT.computeHAND(DEM)
+    HANDPath =  r'C:\Users\abfernan\CrossCanFloodMapping\PCRasterPython\data\BCQuesnellWsh2HAND.map'
+    
+    PCRT.computeHAND(DEM,HANDPath)
     # gdalReader = U.importRasterGDAL(DEM)
     # nodata = gdalReader.NoData
     # print(nodata)

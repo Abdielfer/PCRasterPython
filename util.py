@@ -26,9 +26,9 @@ def replaceExtention(inPath,NewExt):
     '''
     Just remember to add the poin to the new ext -> '.map'
     '''
-    _,fileName = ntpath.split(inPath)
+    dir,fileName = ntpath.split(inPath)
     _,actualExt = ntpath.splitext(fileName)
-    newName= ntpath.basename(inPath).replace(actualExt,NewExt)
+    newName= os.path.join(dir,ntpath.basename(inPath).replace(actualExt,NewExt))
     return newName
 
 ####   GDAL Tools  ###
@@ -97,7 +97,7 @@ class RasterGDAL():
     def saveTiffAsPCRaster(self):
         outpPath = ntpath.basename(self.inputPath).replace('.tif','.map') 
         gdal.Translate(outpPath,self.ds,format='PCRaster')
-        return True
+        return outpPath
 
     def printRaster(self):
         print("---- Image size ----")
@@ -111,11 +111,18 @@ class RasterGDAL():
         print(f"projection : {self.projection}")
         print(f"MetaData : {self.MetaData}")
 
+###  GDAL independent functions
+def translateRaster(inPath, outpPath, format:str = "GeoTiff"):
+        """
+        Ref: https://gdal.org/api/python/osgeo.gdal.html#osgeo.gdal.Translate
+        """
+        gdal.Translate(outpPath,inPath,format=format)
+        return True
 
 def saveTiffAsPCRaster(inputPath):
-        outpPath = ntpath.basename(inputPath).replace('.tif','.map') 
+        outpPath = replaceExtention(inputPath,'.map')
         gdal.Translate(outpPath,inputPath,format='PCRaster')
-        return True
+        return outpPath
 
 def readRasterAsArry(rasterPath):
    return gdal_array.LoadFile(rasterPath)
@@ -174,9 +181,9 @@ class dtmTransformer():
     Functions are mostly based on WhiteBoxTools libraries. For optimal functionality DTM’s most be high resolution, 
     ideally Lidar 1 m or < 2m. 
     '''
-    def __init__(self, workingDir):
+    def __init__(self, workingDir:os.path = None):
         self.mainFileName = " "
-        if os.path.isdir(workingDir): # Creates output dir if it does not already exist 
+        if workingDir is not None: # Creates output dir if it does not already exist 
             self.workingDir = workingDir
             wbt.set_working_dir(workingDir)
         else:
