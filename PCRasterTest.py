@@ -1,13 +1,17 @@
 import pcraster as pcr
 from pcraster import *
+import util as U
 
-def computeHAND(DEMPath,HANDPath, saveLowDirc:bool=True, saveStrahOrder:bool=True,saveSubCath:bool = True): 
+def computeHAND(DEMPath, FDirMap,HANDPath, saveFlowDirc:bool=True, saveStrahOrder:bool=True,saveSubCath:bool = True): 
     pcr.setclone(DEMPath)
     DEM = pcr.readmap(DEMPath)
     ## Flow Direcction (Use to take long...)
     threshold = 8
-    FlowDir = lddcreate(DEM,1e31,1e31,1e31,1e31)
-    if saveLowDirc:
+    # FlowDir = lddcreate(DEM,1e31,1e31,1e31,1e31)
+    wbt_DTMTransformer = U.dtmTransformer()
+    wbt_DTMTransformer.DInfPointer(DEM,FDirMap)
+    FlowDir = U.importRasterGDAL(FDirMap)
+    if saveFlowDirc:
         pcr.report(FlowDir, 'data\ldd.map')
     ## Strahler order 
     print('Strahler order...')

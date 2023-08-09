@@ -151,11 +151,8 @@ class dtmTransformer():
             self.workingDir = workingDir
             wbt.set_working_dir(workingDir)
         else:
-            self.workingDir = input('Enter working directory')
-            ensureDirectory(self.workingDir)
-            wbt.set_working_dir(self.workingDir)
+            wbt.set_working_dir(os.getcwd())
         
-    
     def fixNoDataAndfillDTM(self, inDTMName, eraseIntermediateRasters = True):
         '''
         Ref:   https://www.whiteboxgeo.com/manual/wbt_book/available_tools/hydrological_analysis.html#filldepressions
@@ -291,6 +288,16 @@ class dtmTransformer():
             callback=default_callback
             )
 
+    def DInfPointer(self,inDTMName,outDInfinity):
+        '''
+        inDTMName: MUST be a "CORRECTE"D" DTM or DEM
+        '''
+        wbt.d_inf_pointer(
+            inDTMName, 
+            outDInfinity, 
+            callback=default_callback
+            )
+            
     ### Ready  ####
     def computeSlope(self,inDTMName,outSlope):
         wbt.slope(inDTMName,

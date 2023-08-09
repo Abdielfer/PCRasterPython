@@ -12,22 +12,21 @@ import util as U
 # save raster output( *.tif)
 
 
-
-
 def main():
     DEM =  r'C:\Users\abfernan\CrossCanFloodMapping\PCRasterPython\data\BCQuesnellWsh2GeoFill.tif'
     # gdalReader = U.importRasterGDAL(DEM)
     # nodata = gdalReader.NoData
     # print(nodata)
-    # # gdalReader.printRaster()
+    # 
+    #  gdalReader.printRaster()
     # arr = gdalReader.getRasterNpArray().astype('int64')
     # print(type(arr))
 
     # arrPCR = PCR.numpy2pcr(dataType='Nominal',array = arr,mv = nodata)
 
-    rasterData,_ = U.readRaster(DEM)
-    pcr.setclone('data\BC_Quesnel_PCr_WShed2_Fill.map')
-    arrPCR = pcr.numpy2pcr(pcr.clone(),array = rasterData,mv = -3.40282347e+38)
+    # rasterData,_ = U.readRaster(DEM)
+    # pcr.setclone('data\BC_Quesnel_PCr_WShed2_Fill.map')
+    # arrPCR = pcr.numpy2pcr(pcr.clone(),array = rasterData,mv = -3.40282347e+38)
 
 if __name__ == "__main__":
     main()  
