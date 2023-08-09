@@ -10,7 +10,7 @@ import util as U
 
 
 def main():
-    DEM =  r'C:\Users\abfernan\CrossCanFloodMapping\PCRasterPython\data\BCQuesnellWsh2GeoFill.tif'
+    DEM =  r'C:\Users\abfernan\CrossCanFloodMapping\PCRasterPython\data\BCQuesnellWsh2FIllReprojected4326.tif'
     HANDPath =  r'C:\Users\abfernan\CrossCanFloodMapping\PCRasterPython\data\BCQuesnellWsh2HAND.map'
     
     PCRT.computeHAND(DEM,HANDPath)
@@ -29,4 +29,5 @@ def main():
     # arrPCR = pcr.numpy2pcr(pcr.clone(),array = rasterData,mv = -3.40282347e+38)
 
 if __name__ == "__main__":
-    main()  
+    with U.timeit():
+        main()  

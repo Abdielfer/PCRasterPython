@@ -1,10 +1,22 @@
-import os, sys, pathlib,ntpath
+import os, sys, pathlib,ntpath 
+from datetime import datetime
 from osgeo import gdal
 from osgeo import gdal_array
 import rasterio as rio
 import numpy as np
 from whitebox.whitebox_tools import WhiteboxTools, default_callback
 import whitebox_workflows as wbw   
+
+class timeit(): 
+    '''
+    to compute execution time do:
+    with timeit():
+         your code, e.g., 
+    '''
+    def __enter__(self):
+        self.tic = datetime.now()
+    def __exit__(self, *args, **kwargs):
+        print('runtime: {}'.format(datetime.now() - self.tic))
 
 ### Configurations And file management
 def ensureDirectory(pathToCheck):  
@@ -15,7 +27,7 @@ def ensureDirectory(pathToCheck):
 
 def splitFilenameAndExtention(file_path):
     '''
-    pathlib.Path Options: 
+     pathlib.Path Options 
     '''
     fpath = pathlib.Path(file_path)
     extention = fpath.suffix
@@ -126,6 +138,14 @@ def saveTiffAsPCRaster(inputPath):
 
 def readRasterAsArry(rasterPath):
    return gdal_array.LoadFile(rasterPath)
+
+def reprojectRaster(outMap,inMap, kwargs):
+    '''
+    kwargs example: kwargs = {'format': 'GTiff', 'geoloc': True}
+    '''
+    ds = gdal.Warp(outMap, inMap, **kwargs)
+    del ds
+    return outMap
 
 ####   Rasterio Tools  #####
 def readRasterRio(rasterPath:os.path):
