@@ -1,3 +1,6 @@
+import sys
+sys.path.append('C:/Users/abfernan/.conda/envs/PCRaster/')
+
 
 import PCRasterTest as PCRT
 
