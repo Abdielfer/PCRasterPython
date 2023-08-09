@@ -1,18 +1,21 @@
-import pcraster as pcr
+
 from pcraster import *
+import pcraster as pcr
 import util as U
 
-def computeHAND(DEMPath, FDirMap,HANDPath, saveFlowDirc:bool=True, saveStrahOrder:bool=True,saveSubCath:bool = True): 
-    pcr.setclone(DEMPath)
-    DEM = pcr.readmap(DEMPath)
+def computeHAND(DEMPath,HANDPath,saveStrahOrder:bool=True,saveSubCath:bool = True): 
+    DEMMap = U.saveTiffAsPCRaster(DEMPath)
+    pcr.setclone(DEMMap)
+    DEM = pcr.readmap(DEMMap)
     ## Flow Direcction (Use to take long...)
     threshold = 8
     # FlowDir = lddcreate(DEM,1e31,1e31,1e31,1e31)
+    ### Testing replace D8 Flow direction with Dinf from WbTools
+    FDirPath = U.replaceExtention(DEMPath,'_Dinf.tif')
     wbt_DTMTransformer = U.dtmTransformer()
-    wbt_DTMTransformer.DInfPointer(DEM,FDirMap)
-    FlowDir = U.importRasterGDAL(FDirMap)
-    if saveFlowDirc:
-        pcr.report(FlowDir, 'data\ldd.map')
+    print("Computing DInf flow dir....")
+    wbt_DTMTransformer.DInfPointer(DEMPath,FDirPath)
+    FlowDir = U.saveTiffAsPCRaster(FDirPath)
     ## Strahler order 
     print('Strahler order...')
     strahlerOrder = streamorder(FlowDir)

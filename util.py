@@ -22,7 +22,7 @@ def splitFilenameAndExtention(file_path):
     name = fpath.stem
     return name, extention 
 
-def replaceEtrention(inPath,NewExt):
+def replaceExtention(inPath,NewExt):
     '''
     Just remember to add the poin to the new ext -> '.map'
     '''
@@ -112,7 +112,11 @@ class RasterGDAL():
         print(f"MetaData : {self.MetaData}")
 
 
-# Read raster data as numeric array from file
+def saveTiffAsPCRaster(inputPath):
+        outpPath = ntpath.basename(inputPath).replace('.tif','.map') 
+        gdal.Translate(outpPath,inputPath,format='PCRaster')
+        return True
+
 def readRasterAsArry(rasterPath):
    return gdal_array.LoadFile(rasterPath)
 

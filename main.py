@@ -1,7 +1,5 @@
 
-# import PCRasterTest as PCRT
-import pcraster as pcr
-import util as U 
+import PCRasterTest as PCRT
 
 
 # inmport raster.tif
@@ -14,6 +12,7 @@ import util as U
 
 def main():
     DEM =  r'C:\Users\abfernan\CrossCanFloodMapping\PCRasterPython\data\BCQuesnellWsh2GeoFill.tif'
+    PCRT.computeHAND(DEM)
     # gdalReader = U.importRasterGDAL(DEM)
     # nodata = gdalReader.NoData
     # print(nodata)
